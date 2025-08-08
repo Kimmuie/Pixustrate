@@ -1,4 +1,7 @@
-from PIL import Image
+from PIL import Image, ImageEnhance
+from io import BytesIO
+
+import requests
 
 # Map of 8-dot Braille characters
 def get_braille_char(block):
@@ -13,8 +16,8 @@ def get_braille_char(block):
         (1, 3),  # dot 8
     ]
     value = 0
-    brightness * 2
-    threshold = brightness  # brightness threshold
+    # brightness * 2
+    threshold = 115  # brightness threshold
 
     for i, (x, y) in enumerate(dots):
         if y < len(block) and x < len(block[0]):
@@ -23,10 +26,22 @@ def get_braille_char(block):
     
     return chr(0x2800 + value)
 
-def image_to_braille(image_path, max_width=100):
-    img = Image.open(image_path).convert('L')  # grayscale
-    width, height = img.size
+def image_to_braille(image_path, max_width=100, invert=True):
+    if isinstance(image_path, str) and (image_path.startswith('http://') or image_path.startswith('https://')):
+        response = requests.get(image_path)
+        response.raise_for_status()
+        img = Image.open(BytesIO(response.content)).convert('L')
+    else:
+        img = Image.open(image_path).convert('L')
 
+    width, height = img.size
+    if invert:
+        img = Image.eval(img, lambda x: 255 - x)
+    enhancer = ImageEnhance.Contrast(img)
+    img = enhancer.enhance(2.0)  # more contrast
+
+    enhancer = ImageEnhance.Brightness(img)
+    img = enhancer.enhance(1.2)  # slightly brighter
     # Resize for terminal width
     aspect_ratio = height / width
     new_width = min(max_width, width)
@@ -55,10 +70,9 @@ def image_to_braille(image_path, max_width=100):
 
     return "\n".join(braille_lines)
 
-# === Main Program ===
 if __name__ == "__main__":
-    brightness = int(input("Input the brightness between 0-100: "))
-    image_path = input("Input the words for creating image: ")
+    # brightness = int(input("Input the brightness between 0-100: "))
+    image_path = input("Input the keywords or imageURL for creating image: ")
     try:
         braille_art = image_to_braille(image_path)
         print("\Pixustrate Art Output:\n")
