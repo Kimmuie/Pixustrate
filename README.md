@@ -3,7 +3,7 @@
 ### What is [Pixustrate](https://easylandlord-e3923.web.app/)?
 **Pixustrate** Python-based tool that instantly converts search **keywords** or **image URLs** into unique braille-style illustrations.
 
-*🗣 Note: Try It Online (Hosted on Replit)*
+*🗣 Note: Try It Online (Hosted on Replit)*  
 ----------- Click here to use [Pixustrate](https://easylandlord-e3923.web.app/) ----------- 
 <br>
 <br>
@@ -17,10 +17,8 @@
 
 ### Website Interface
 <div>
-  <img src="./illustration/UI1_.png"  title="UI" height="210"/>
-  <img src="./illustration/UI2_.png"  title="UI" height="210"/>
-  <img src="./illustration/UI3_.png"  title="UI" height="210"/>
-  <img src="./illustration/UI4_.png"  title="UI" height="210"/>
+  <img src="./illustration/UI1.jpg"  title="UI" height="210"/>
+  <img src="./illustration/UI2.jpg"  title="UI" height="210"/>
 </div>
 
 ## License
