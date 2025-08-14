@@ -1,10 +1,10 @@
 # Pixustrate
 
-### What is [Pixustrate](https://easylandlord-e3923.web.app/](https://replit.com/@pranchayutnetsa/Pixustrate#pixustrate.py))?
+### What is [Pixustrate](https://replit.com/@pranchayutnetsa/Pixustrate#pixustrate.py)?
 **Pixustrate** Python-based tool that instantly converts search **keywords** or **image URLs** into unique braille-style illustrations.
 
 *🗣 Note: Try It Online (Hosted on Replit)*  
------------ Click here to use [Pixustrate](https://easylandlord-e3923.web.app/](https://replit.com/@pranchayutnetsa/Pixustrate#pixustrate.py)) ----------- 
+----------- Click here to use [Pixustrate](https://replit.com/@pranchayutnetsa/Pixustrate#pixustrate.py) ----------- 
 <br>
 <br>
 <br>
