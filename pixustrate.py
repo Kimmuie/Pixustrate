@@ -1,7 +1,47 @@
 from PIL import Image, ImageEnhance
 from io import BytesIO
-
 import requests
+import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def fetch_image_from_keywords(keywords):
+    """Fetch image URL using Google Custom Search API directly"""
+    api_key = os.getenv("googleSearchAPI")
+    search_engine_id = os.getenv("searchEngineAPI")
+    
+    if not api_key or not search_engine_id:
+        raise ValueError("Google API credentials not found. Please check your .env file.")
+    
+    # Google Custom Search API endpoint
+    url = "https://www.googleapis.com/customsearch/v1"
+    params = {
+        'key': api_key,
+        'cx': search_engine_id,
+        'q': keywords,
+        'searchType': 'image',
+        'num': 1,
+        'safe': 'off',
+        'fileType': 'jpg,png'
+    }
+    
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+        
+        if 'items' in data and len(data['items']) > 0:
+            return data['items'][0]['link']
+        else:
+            return None
+    except Exception as e:
+        raise ValueError(f"Failed to search for images: {e}")
+
+def is_url(string):
+    """Check if string is a URL"""
+    return string.startswith(('http://', 'https://'))
 
 # Map of 8-dot Braille characters
 def get_braille_char(block):
@@ -26,13 +66,19 @@ def get_braille_char(block):
     
     return chr(0x2800 + value)
 
-def image_to_braille(image_path, max_width=100, invert=True):
-    if isinstance(image_path, str) and (image_path.startswith('http://') or image_path.startswith('https://')):
-        response = requests.get(image_path)
-        response.raise_for_status()
-        img = Image.open(BytesIO(response.content)).convert('L')
+def image_to_braille(image_path, max_width=120, invert=True):
+    # Determine if input is keywords or URL
+    if is_url(image_path):
+        image_url = image_path
     else:
-        img = Image.open(image_path).convert('L')
+        # Search for image using keywords
+        image_url = fetch_image_from_keywords(image_path)
+        if not image_url:
+            raise ValueError("No image found for given keywords.")
+    
+    response = requests.get(image_url)
+    response.raise_for_status()
+    img = Image.open(BytesIO(response.content)).convert('L')
 
     width, height = img.size
     if invert:
@@ -75,7 +121,7 @@ if __name__ == "__main__":
     image_path = input("Input the keywords or imageURL for creating image: ")
     try:
         braille_art = image_to_braille(image_path)
-        print("\Pixustrate Art Output:\n")
+        print("\nPixustrate Art Output:\n")
         print(braille_art)
     except Exception as e:
         print("Failed to load or process image:", e)
