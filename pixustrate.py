@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def fetch_image_from_keywords(keywords):
-    """Fetch image URL using Google Custom Search API directly"""
     api_key = os.getenv("googleSearchAPI")
     search_engine_id = os.getenv("searchEngineAPI")
     
@@ -24,7 +23,9 @@ def fetch_image_from_keywords(keywords):
         'searchType': 'image',
         'num': 1,
         'safe': 'off',
-        'fileType': 'jpg,png'
+        'fileType': 'jpg,png',
+        'imgType': 'photo', 
+        'imgSize': 'medium',
     }
     
     try:
